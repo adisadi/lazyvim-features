@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 # Options from devcontainer-feature.json
@@ -23,6 +23,11 @@ install_dotnet_sdk() {
     chmod +x /tmp/dotnet-install.sh
     /tmp/dotnet-install.sh --channel "$DOTNETVERSION" --install-dir "$DOTNET_INSTALL_DIR"
     rm -f /tmp/dotnet-install.sh
+
+    # Ensure dotnet is in PATH
+    if [ ! -f /usr/local/bin/dotnet ]; then
+        ln -sf "$DOTNET_INSTALL_DIR/dotnet" /usr/local/bin/dotnet
+    fi
 
     echo ".NET SDK installed: $(dotnet --list-sdks | grep "^${DOTNETVERSION}" || echo "${DOTNETVERSION}.x")"
 }
@@ -49,9 +54,14 @@ install_dotnet_tools() {
         return
     fi
 
-    su - "$TARGET_USER" -c "dotnet tool install --global dotnet-ef" || true
-    su - "$TARGET_USER" -c "dotnet tool install --global dotnet-outdated-tool" || true
-    su - "$TARGET_USER" -c "dotnet tool install --global EasyDotnet" || true
+    DOTNET_PATH="/usr/local/bin/dotnet"
+    su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global dotnet-ef" || true
+    su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global dotnet-outdated-tool" || true
+    su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global EasyDotnet" || true
+
+    # Add dotnet tools to PATH system-wide
+    echo 'export PATH="$PATH:$HOME/.dotnet/tools"' > /etc/profile.d/dotnet-tools.sh
+    chmod +x /etc/profile.d/dotnet-tools.sh
 
     echo ".NET tools installed for user: $TARGET_USER"
 }
@@ -66,7 +76,7 @@ setup_dev_certs() {
         return
     fi
 
-    su - "$TARGET_USER" -c "dotnet dev-certs https" || true
+    su - "$TARGET_USER" -c "/usr/local/bin/dotnet dev-certs https" || true
 }
 
 # Copy default nvim config if none exists
