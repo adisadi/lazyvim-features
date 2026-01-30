@@ -1,0 +1,19 @@
+{
+    "id": "lazyvim-dotnet",
+    "version": "1.0.0",
+    "name": "LazyVim + .NET",
+    "documentationURL": "https://github.com/adisadi/lazyvim-features",
+    "description": "Extends LazyVim with .NET development tools (dotnet-ef, dotnet-outdated, EasyDotnet)",
+    "options": {
+        "dotnetVersion": {
+            "type": "string",
+            "proposals": ["10.0", "9.0", "8.0"],
+            "default": "10.0",
+            "description": "Additional .NET SDK version to install side-by-side"
+        }
+    },
+    "dependsOn": {
+        "ghcr.io/adisadi/lazyvim-features/lazyvim": {}
+    },
+    "installsAfter": ["ghcr.io/devcontainers/features/dotnet"]
+}

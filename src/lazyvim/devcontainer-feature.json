@@ -1,0 +1,25 @@
+{
+    "id": "lazyvim",
+    "version": "1.0.0",
+    "name": "LazyVim",
+    "documentationURL": "https://github.com/adisadi/lazyvim-features",
+    "description": "Installs Neovim with LazyVim dependencies (ripgrep, fd, fzf, lazygit, clipboard support)",
+    "options": {
+        "version": {
+            "type": "string",
+            "proposals": ["stable", "nightly"],
+            "default": "stable",
+            "description": "Neovim version to install"
+        },
+        "configRepo": {
+            "type": "string",
+            "default": "",
+            "description": "Git repository URL to clone as nvim config (e.g., https://github.com/user/nvim-config)"
+        }
+    },
+    "containerEnv": {
+        "EDITOR": "nvim",
+        "VISUAL": "nvim"
+    },
+    "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+}
