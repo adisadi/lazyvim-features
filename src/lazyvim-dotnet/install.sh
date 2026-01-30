@@ -24,6 +24,11 @@ install_dotnet_sdk() {
     /tmp/dotnet-install.sh --channel "$DOTNETVERSION" --install-dir "$DOTNET_INSTALL_DIR"
     rm -f /tmp/dotnet-install.sh
 
+    # Ensure dotnet is in PATH
+    if [ ! -f /usr/local/bin/dotnet ]; then
+        ln -sf "$DOTNET_INSTALL_DIR/dotnet" /usr/local/bin/dotnet
+    fi
+
     echo ".NET SDK installed: $(dotnet --list-sdks | grep "^${DOTNETVERSION}" || echo "${DOTNETVERSION}.x")"
 }
 

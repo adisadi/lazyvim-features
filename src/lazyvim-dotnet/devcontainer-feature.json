@@ -14,6 +14,5 @@
     },
     "dependsOn": {
         "ghcr.io/adisadi/lazyvim-features/lazyvim": {}
-    },
-    "installsAfter": ["ghcr.io/devcontainers/features/dotnet"]
+    }
 }
