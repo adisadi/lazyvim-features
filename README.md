@@ -89,3 +89,34 @@ For .NET development:
     ]
 }
 ```
+
+## Clipboard Support
+
+To enable clipboard sharing between the container and host, add the following to your `devcontainer.json`:
+
+### X11
+
+```json
+{
+    "containerEnv": {
+        "DISPLAY": "${localEnv:DISPLAY}"
+    },
+    "mounts": [
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+    ]
+}
+```
+
+### Wayland
+
+```json
+{
+    "containerEnv": {
+        "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+        "XDG_RUNTIME_DIR": "/tmp"
+    },
+    "mounts": [
+        "source=${localEnv:XDG_RUNTIME_DIR}/${localEnv:WAYLAND_DISPLAY},target=/tmp/${localEnv:WAYLAND_DISPLAY},type=bind"
+    ]
+}
+```

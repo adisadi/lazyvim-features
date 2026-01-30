@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 # Options from devcontainer-feature.json
@@ -58,6 +58,10 @@ install_dotnet_tools() {
     su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global dotnet-ef" || true
     su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global dotnet-outdated-tool" || true
     su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global EasyDotnet" || true
+
+    # Add dotnet tools to PATH system-wide
+    echo 'export PATH="$PATH:$HOME/.dotnet/tools"' > /etc/profile.d/dotnet-tools.sh
+    chmod +x /etc/profile.d/dotnet-tools.sh
 
     echo ".NET tools installed for user: $TARGET_USER"
 }
