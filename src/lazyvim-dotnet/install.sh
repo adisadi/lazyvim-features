@@ -54,9 +54,10 @@ install_dotnet_tools() {
         return
     fi
 
-    su - "$TARGET_USER" -c "dotnet tool install --global dotnet-ef" || true
-    su - "$TARGET_USER" -c "dotnet tool install --global dotnet-outdated-tool" || true
-    su - "$TARGET_USER" -c "dotnet tool install --global EasyDotnet" || true
+    DOTNET_PATH="/usr/local/bin/dotnet"
+    su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global dotnet-ef" || true
+    su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global dotnet-outdated-tool" || true
+    su - "$TARGET_USER" -c "$DOTNET_PATH tool install --global EasyDotnet" || true
 
     echo ".NET tools installed for user: $TARGET_USER"
 }
@@ -71,7 +72,7 @@ setup_dev_certs() {
         return
     fi
 
-    su - "$TARGET_USER" -c "dotnet dev-certs https" || true
+    su - "$TARGET_USER" -c "/usr/local/bin/dotnet dev-certs https" || true
 }
 
 # Copy default nvim config if none exists
