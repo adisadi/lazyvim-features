@@ -29,7 +29,8 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard
+      wl-clipboard \
+      kitty-terminfo
     # Create fd symlink (Debian/Ubuntu package is fd-find)
     ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
     apt-get clean
@@ -45,7 +46,8 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard
+      wl-clipboard \
+      kitty-terminfo
   elif command -v dnf >/dev/null 2>&1; then
     dnf install -y \
       ca-certificates \
@@ -59,7 +61,8 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard
+      wl-clipboard \
+      kitty-terminfo
     dnf clean all
   elif command -v yum >/dev/null 2>&1; then
     yum install -y \
@@ -72,7 +75,8 @@ install_packages() {
       ripgrep \
       fzf \
       unzip \
-      xclip
+      xclip \
+      kitty-terminfo
     yum clean all
   elif command -v pacman >/dev/null 2>&1; then
     pacman -Syu --noconfirm \
@@ -85,7 +89,8 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard
+      wl-clipboard \
+      kitty-terminfo
   else
     echo "Unsupported package manager"
     exit 1
