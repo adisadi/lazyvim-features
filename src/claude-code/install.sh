@@ -44,19 +44,6 @@ fi
 if [ "$REMOTE_USER" != "root" ]; then
     chown -R "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.local" 2>/dev/null || true
     chown -R "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.cache" 2>/dev/null || true
-    chown -R "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.claude" 2>/dev/null || true
-fi
-
-# Symlink host-mounted claude config into the user's home directory.
-# The feature mounts host ~/.claude to /dc/claude-code/.claude
-# and host ~/.claude.json to /dc/claude-code/.claude.json
-# The mount targets don't exist at build time, but symlinks to
-# non-existent paths are valid - they resolve at container runtime.
-ln -sf /dc/claude-code/.claude "$REMOTE_USER_HOME/.claude"
-ln -sf /dc/claude-code/.claude.json "$REMOTE_USER_HOME/.claude.json"
-
-if [ "$REMOTE_USER" != "root" ]; then
-    chown -h "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.claude" "$REMOTE_USER_HOME/.claude.json"
 fi
 
 echo "Claude Code installed: $(claude --version 2>/dev/null || echo 'OK')"

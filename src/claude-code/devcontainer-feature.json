@@ -1,6 +1,6 @@
 {
   "id": "claude-code",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "Claude Code",
   "documentationURL": "https://github.com/adisadi/lazyvim-features",
   "description": "Installs Claude Code CLI (standalone, no Node.js required) and mounts host ~/.claude for authentication",
@@ -9,12 +9,12 @@
     {
       "type": "bind",
       "source": "${localEnv:HOME}/.claude",
-      "target": "/dc/claude-code/.claude"
+      "target": "/home/vscode/.claude"
     },
     {
       "type": "bind",
       "source": "${localEnv:HOME}/.claude.json",
-      "target": "/dc/claude-code/.claude.json"
+      "target": "/home/vscode/.claude.json"
     }
   ],
   "installsAfter": [
