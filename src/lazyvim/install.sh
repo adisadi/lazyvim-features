@@ -4,6 +4,7 @@ set -e
 # Options from devcontainer-feature.json
 VERSION="${VERSION:-stable}"
 CONFIGREPO="${CONFIGREPO:-}"
+LOCALE="${LOCALE:-en_US.UTF-8}"
 
 echo "Installing LazyVim dependencies..."
 
@@ -30,9 +31,12 @@ install_packages() {
       unzip \
       xclip \
       wl-clipboard \
-      kitty-terminfo
+      locales
     # Create fd symlink (Debian/Ubuntu package is fd-find)
     ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
+    # Generate requested locale
+    sed -i "/${LOCALE}/s/^# //g" /etc/locale.gen 2>/dev/null || true
+    locale-gen 2>/dev/null || true
     apt-get clean
     rm -rf /var/lib/apt/lists/*
   elif command -v apk >/dev/null 2>&1; then
@@ -46,8 +50,7 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard \
-      kitty-terminfo
+      wl-clipboard
   elif command -v dnf >/dev/null 2>&1; then
     dnf install -y \
       ca-certificates \
@@ -61,8 +64,7 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard \
-      kitty-terminfo
+      wl-clipboard
     dnf clean all
   elif command -v yum >/dev/null 2>&1; then
     yum install -y \
@@ -75,8 +77,7 @@ install_packages() {
       ripgrep \
       fzf \
       unzip \
-      xclip \
-      kitty-terminfo
+      xclip
     yum clean all
   elif command -v pacman >/dev/null 2>&1; then
     pacman -Syu --noconfirm \
@@ -89,8 +90,7 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard \
-      kitty-terminfo
+      wl-clipboard
   else
     echo "Unsupported package manager"
     exit 1
@@ -187,10 +187,34 @@ clone_config() {
   fi
 }
 
+# Install kitty terminfo from source (not available as apt package in all images)
+setup_kitty_terminfo() {
+  if [ ! -e /usr/share/terminfo/x/xterm-kitty ]; then
+    echo "Installing kitty terminfo..."
+    curl -fsSL https://raw.githubusercontent.com/kovidgoyal/kitty/master/terminfo/x/xterm-kitty -o /tmp/xterm-kitty
+    mkdir -p /usr/share/terminfo/x
+    install -m 644 /tmp/xterm-kitty /usr/share/terminfo/x/xterm-kitty
+    rm -f /tmp/xterm-kitty
+  fi
+}
+
+# Set locale environment system-wide
+setup_locale() {
+  echo "export LANG=${LOCALE}" > /etc/profile.d/locale.sh
+  echo "export LC_ALL=${LOCALE}" >> /etc/profile.d/locale.sh
+  chmod +x /etc/profile.d/locale.sh
+
+  # Also set in /etc/environment for non-login shells
+  echo "LANG=${LOCALE}" >> /etc/environment
+  echo "LC_ALL=${LOCALE}" >> /etc/environment
+}
+
 # Main installation
 install_packages
 install_neovim
 install_lazygit
+setup_kitty_terminfo
+setup_locale
 clone_config
 
 echo "LazyVim dependencies installed successfully!"
