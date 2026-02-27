@@ -40,9 +40,11 @@ elif [ -f "$CLAUDE_BIN" ]; then
     ln -sf "$CLAUDE_BIN" /usr/local/bin/claude
 fi
 
-# Fix ownership of installed files
+# Fix ownership of all files the installer created in the user's home
 if [ "$REMOTE_USER" != "root" ]; then
     chown -R "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.local" 2>/dev/null || true
+    chown -R "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.cache" 2>/dev/null || true
+    chown -R "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.claude" 2>/dev/null || true
 fi
 
 # Create a profile script that symlinks the host-mounted claude config

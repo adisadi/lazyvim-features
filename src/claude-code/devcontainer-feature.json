@@ -1,21 +1,23 @@
 {
-    "id": "claude-code",
-    "version": "1.0.0",
-    "name": "Claude Code",
-    "documentationURL": "https://github.com/adisadi/lazyvim-features",
-    "description": "Installs Claude Code CLI (standalone, no Node.js required) and mounts host ~/.claude for authentication",
-    "options": {},
-    "mounts": [
-        {
-            "type": "bind",
-            "source": "${localEnv:HOME}/.claude",
-            "target": "/dc/claude-code/.claude"
-        },
-        {
-            "type": "bind",
-            "source": "${localEnv:HOME}/.claude.json",
-            "target": "/dc/claude-code/.claude.json"
-        }
-    ],
-    "installsAfter": ["ghcr.io/devcontainers/features/common-utils"]
+  "id": "claude-code",
+  "version": "1.0.1",
+  "name": "Claude Code",
+  "documentationURL": "https://github.com/adisadi/lazyvim-features",
+  "description": "Installs Claude Code CLI (standalone, no Node.js required) and mounts host ~/.claude for authentication",
+  "options": {},
+  "mounts": [
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.claude",
+      "target": "/dc/claude-code/.claude"
+    },
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.claude.json",
+      "target": "/dc/claude-code/.claude.json"
+    }
+  ],
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
 }
