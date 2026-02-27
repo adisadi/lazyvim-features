@@ -54,6 +54,14 @@ else
     exit 1
 fi
 
+# Test kitty terminfo
+if [ -f /usr/share/terminfo/x/xterm-kitty ]; then
+    echo "✓ kitty terminfo installed"
+else
+    echo "✗ kitty terminfo not found at /usr/share/terminfo/x/xterm-kitty"
+    exit 1
+fi
+
 # Test environment variables
 if [ "$EDITOR" = "nvim" ]; then
     echo "✓ EDITOR is set to nvim"

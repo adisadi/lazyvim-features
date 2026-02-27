@@ -1,6 +1,6 @@
 {
   "id": "lazyvim",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "LazyVim",
   "documentationURL": "https://github.com/adisadi/lazyvim-features",
   "description": "Installs Neovim with LazyVim dependencies (ripgrep, fd, fzf, lazygit, clipboard support)",

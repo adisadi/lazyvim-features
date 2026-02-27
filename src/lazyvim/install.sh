@@ -32,6 +32,10 @@ install_packages() {
       xclip \
       wl-clipboard \
       locales
+    # Enable universe repo for kitty-terminfo (not in main on all Ubuntu versions)
+    sed -i 's/^# \(deb.*universe\)$/\1/' /etc/apt/sources.list 2>/dev/null || true
+    apt-get update
+    apt-get install -y --no-install-recommends kitty-terminfo
     # Create fd symlink (Debian/Ubuntu package is fd-find)
     ln -sf "$(which fdfind)" /usr/local/bin/fd 2>/dev/null || true
     # Generate requested locale
@@ -50,7 +54,8 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard
+      wl-clipboard \
+      kitty-terminfo
   elif command -v dnf >/dev/null 2>&1; then
     dnf install -y \
       ca-certificates \
@@ -64,7 +69,8 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard
+      wl-clipboard \
+      kitty-terminfo
     dnf clean all
   elif command -v yum >/dev/null 2>&1; then
     yum install -y \
@@ -77,7 +83,8 @@ install_packages() {
       ripgrep \
       fzf \
       unzip \
-      xclip
+      xclip \
+      kitty-terminfo
     yum clean all
   elif command -v pacman >/dev/null 2>&1; then
     pacman -Syu --noconfirm \
@@ -90,7 +97,8 @@ install_packages() {
       fzf \
       unzip \
       xclip \
-      wl-clipboard
+      wl-clipboard \
+      kitty-terminfo
   else
     echo "Unsupported package manager"
     exit 1
@@ -187,17 +195,6 @@ clone_config() {
   fi
 }
 
-# Install kitty terminfo from source (not available as apt package in all images)
-setup_kitty_terminfo() {
-  if [ ! -e /usr/share/terminfo/x/xterm-kitty ]; then
-    echo "Installing kitty terminfo..."
-    curl -fsSL https://raw.githubusercontent.com/kovidgoyal/kitty/master/terminfo/x/xterm-kitty -o /tmp/xterm-kitty
-    mkdir -p /usr/share/terminfo/x
-    install -m 644 /tmp/xterm-kitty /usr/share/terminfo/x/xterm-kitty
-    rm -f /tmp/xterm-kitty
-  fi
-}
-
 # Set locale environment system-wide
 setup_locale() {
   echo "export LANG=${LOCALE}" > /etc/profile.d/locale.sh
@@ -213,7 +210,6 @@ setup_locale() {
 install_packages
 install_neovim
 install_lazygit
-setup_kitty_terminfo
 setup_locale
 clone_config
 
