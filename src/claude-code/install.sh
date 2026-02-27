@@ -47,19 +47,17 @@ if [ "$REMOTE_USER" != "root" ]; then
     chown -R "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.claude" 2>/dev/null || true
 fi
 
-# Create a profile script that symlinks the host-mounted claude config
-# into the current user's home directory at login time.
+# Symlink host-mounted claude config into the user's home directory.
 # The feature mounts host ~/.claude to /dc/claude-code/.claude
 # and host ~/.claude.json to /dc/claude-code/.claude.json
-cat > /etc/profile.d/claude-code-config.sh << 'PROFILE'
-if [ -d /dc/claude-code/.claude ] && [ ! -L "$HOME/.claude" ]; then
-    ln -sf /dc/claude-code/.claude "$HOME/.claude"
+# The mount targets don't exist at build time, but symlinks to
+# non-existent paths are valid - they resolve at container runtime.
+ln -sf /dc/claude-code/.claude "$REMOTE_USER_HOME/.claude"
+ln -sf /dc/claude-code/.claude.json "$REMOTE_USER_HOME/.claude.json"
+
+if [ "$REMOTE_USER" != "root" ]; then
+    chown -h "$REMOTE_USER:$REMOTE_USER" "$REMOTE_USER_HOME/.claude" "$REMOTE_USER_HOME/.claude.json"
 fi
-if [ -f /dc/claude-code/.claude.json ] && [ ! -L "$HOME/.claude.json" ]; then
-    ln -sf /dc/claude-code/.claude.json "$HOME/.claude.json"
-fi
-PROFILE
-chmod +x /etc/profile.d/claude-code-config.sh
 
 echo "Claude Code installed: $(claude --version 2>/dev/null || echo 'OK')"
 echo "Claude Code CLI installed successfully!"

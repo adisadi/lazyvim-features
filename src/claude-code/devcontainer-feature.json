@@ -1,6 +1,6 @@
 {
   "id": "claude-code",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "Claude Code",
   "documentationURL": "https://github.com/adisadi/lazyvim-features",
   "description": "Installs Claude Code CLI (standalone, no Node.js required) and mounts host ~/.claude for authentication",
