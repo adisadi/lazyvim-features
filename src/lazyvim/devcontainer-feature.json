@@ -26,8 +26,16 @@
     }
   },
   "mounts": [
-    "source=${localEnv:XDG_RUNTIME_DIR}/${localEnv:WAYLAND_DISPLAY},target=/tmp/${localEnv:WAYLAND_DISPLAY},type=bind",
-    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind"
+    {
+      "source": "${localEnv:XDG_RUNTIME_DIR}/${localEnv:WAYLAND_DISPLAY}",
+      "target": "/tmp/${localEnv:WAYLAND_DISPLAY}",
+      "type": "bind"
+    },
+    {
+      "source": "/tmp/.X11-unix",
+      "target": "/tmp/.X11-unix",
+      "type": "bind"
+    }
   ],
   "containerEnv": {
     "EDITOR": "nvim",
